@@ -55,22 +55,24 @@ end
 #     opts
 #   end
 
-#   name "Test method desc"
+#   name "Test method desc 1"
+#   name "Test method desc 2"
 #   param :email, :email
 #   def test
 #   end
 # end
 
-# ap Foo.method_attr
+# Foo.method_attr
 # {
-#   "test": {
-#     "name": [
-#       "Test method desc"
+#   test: {
+#     name: [
+#       "Test method desc 1",
+#       "Test method desc 2"
 #     ],
-#     "param": [
+#     param: [
 #       {
-#         "name": "email",
-#         "type": "String"
+#         name: :email,
+#         type: String
 #       }
 #     ]
 #   }

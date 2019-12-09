@@ -43,5 +43,5 @@ end
 # end
 # before :method_name
 # instance = new
-# instance.class_callback :before,
-# instance.class_callback :before, arg
+# instance.class_callback :before
+# instance.class_callback :before, @arg
