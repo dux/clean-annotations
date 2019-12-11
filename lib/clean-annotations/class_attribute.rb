@@ -1,28 +1,32 @@
 # Defines class variable
 
-def Object.class_attribute name, default=nil, &block
-  raise ArgumentError.new('name must be symbol') unless name.is_a?(Symbol)
+class Class
+  def class_attribute name, default=nil, &block
+    raise ArgumentError.new('name must be symbol') unless name.is_a?(Symbol)
 
-  ivar = "@class_attribute_#{name}"
+    ivar = "@class_attribute_#{name}"
 
-  instance_variable_set ivar, block || default
+    instance_variable_set ivar, block || default
 
-  define_singleton_method('%s=' % name) { |arg| send(name, arg) }
-  define_singleton_method(name) do |arg=:_undefined, &block|
-    # define and set if argument given
-    if block || arg != :_undefined
-      return instance_variable_set ivar, block || arg
-    end
+    define_singleton_method('%s=' % name) { |arg| send(name, arg) }
+    define_singleton_method(name) do |arg=:_undefined, &block|
+      # define and set if argument given
+      if block || arg != :_undefined
+        return instance_variable_set ivar, block || arg
+      end
 
-    # find value and return
-    ancestors.each do |klass|
-      if klass.instance_variable_defined?(ivar)
-        value = klass.instance_variable_get ivar
-        return value.is_a?(Proc) ? instance_exec(&value) : value
+      # find value and return
+      ancestors.each do |klass|
+        if klass.instance_variable_defined?(ivar)
+          value = klass.instance_variable_get ivar
+          return value.is_a?(Proc) ? instance_exec(&value) : value
+        end
       end
     end
   end
+end
 
+class Object
   def class_attribute name
     self.class.send(name)
   end

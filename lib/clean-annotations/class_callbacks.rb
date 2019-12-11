@@ -1,34 +1,33 @@
 # Rails style callbacks
 
-class Object
-  def class_callback name, arg=nil
-    Object.class_callback name, self, arg
-  end
-
-  def self.class_callback name, context=nil, arg=nil
+class Class
+  def class_callback name
     ivar = "@class_callbacks_#{name}"
 
-    unless context
-      define_singleton_method(name) do |method_name=nil, &block|
-        ref = caller[0].split(':in ').first
+    define_singleton_method(name) do |method_name=nil, &block|
+      ref = caller[0].split(':in ').first
 
-        self.instance_variable_set(ivar, {}) unless instance_variable_defined?(ivar)
-        self.instance_variable_get(ivar)[ref] = method_name || block
-      end
+      self.instance_variable_set(ivar, {}) unless instance_variable_defined?(ivar)
+      self.instance_variable_get(ivar)[ref] = method_name || block
+    end
+  end
+end
 
-    else
-      list = context.respond_to?(:const_missing) && context.respond_to?(:ancestors) ? context.ancestors : context.class.ancestors
-      list = list.slice 0, list.index(Object) if list.index(Object)
+class Object
+  def class_callback name, *args
+    ivar = "@class_callbacks_#{name}"
 
-      list.reverse.each do |klass|
-        if klass.instance_variable_defined?(ivar)
-          mlist = klass.instance_variable_get(ivar).values
-          mlist.each do |m|
-            if m.is_a?(Symbol)
-              context.send m
-            else
-              context.instance_exec arg, &m
-            end
+    list = self.class.ancestors
+    list = list.slice 0, list.index(Object) if list.index(Object)
+
+    list.reverse.each do |klass|
+      if klass.instance_variable_defined?(ivar)
+        mlist = klass.instance_variable_get(ivar).values
+        mlist.each do |m|
+          if m.is_a?(Symbol)
+            send m, *args
+          else
+            instance_exec *args, &m
           end
         end
       end
