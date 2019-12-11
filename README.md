@@ -54,7 +54,7 @@ end
 
 ```
 class Foo
-  class_callback :before
+  define_callback :before
 
   before do
   end
@@ -63,8 +63,8 @@ class Foo
 end
 
 # instance = new
-# instance.class_callback :before
-# instance.class_callback :before, @arg
+# instance.run_callback :before
+# instance.run_callback :before, @arg
 ```
 
 ## Method attributes
