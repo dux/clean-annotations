@@ -1,6 +1,6 @@
-require_relative './clean-annotations/class_callbacks'
-
-# do not load if allready defined
+unless Object.respond_to?(:define_callback)
+  require_relative './clean-annotations/class_callbacks'
+end
 
 unless Object.respond_to?(:class_attribute)
   require_relative './clean-annotations/class_attribute'

@@ -1,8 +1,12 @@
 # Rails style callbacks
 
-class Class
-  def class_callback name
+class Object
+  def define_callback name
     ivar = "@class_callbacks_#{name}"
+
+    unless is_a?(Class) || is_a?(Module)
+      raise ArgumentError, 'define_callback Can only be defined in a class or a module'
+    end
 
     define_singleton_method(name) do |method_name=nil, &block|
       ref = caller[0].split(':in ').first
@@ -11,13 +15,11 @@ class Class
       self.instance_variable_get(ivar)[ref] = method_name || block
     end
   end
-end
 
-class Object
-  def class_callback name, *args
+  def run_callback name, *args
     ivar = "@class_callbacks_#{name}"
 
-    list = self.class.ancestors
+    list = is_a?(Class) || is_a?(Module) ? ancestors : self.class.ancestors
     list = list.slice 0, list.index(Object) if list.index(Object)
 
     list.reverse.each do |klass|
@@ -36,11 +38,11 @@ class Object
 end
 
 # for controllers, execute from AppController to MainController
-# class_callback :before
+# define_callback :before
 # before do
 #    ...
 # end
 # before :method_name
 # instance = new
-# instance.class_callback :before
-# instance.class_callback :before, @arg
+# instance.run_callback :before
+# instance.run_callback :before, @object
