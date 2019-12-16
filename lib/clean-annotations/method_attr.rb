@@ -7,7 +7,7 @@ module MethodAttributes
   def define klass, param_name, &block
     klass.define_singleton_method(param_name) do |*args|
       @@METHOD_OPTS[param_name] ||= []
-      @@METHOD_OPTS[param_name].push block ? block.call(*args) : args[0]
+      @@METHOD_OPTS[param_name].push block ? block.call(*args) : args
     end
 
     klass.define_singleton_method(:method_added) do |name|
