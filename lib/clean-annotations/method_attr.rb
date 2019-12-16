@@ -66,8 +66,8 @@ end
 # {
 #   test: {
 #     name: [
-#       "Test method desc 1",
-#       "Test method desc 2"
+#       ["Test method desc 1"],
+#       ["Test method desc 2"]
 #     ],
 #     param: [
 #       {
