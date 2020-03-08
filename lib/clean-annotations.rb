@@ -9,3 +9,7 @@ end
 unless Object.respond_to?(:method_attr)
   require_relative './clean-annotations/method_attr'
 end
+
+unless Object.respond_to?(:rescue_from)
+  require_relative './clean-annotations/rescue_from'
+end

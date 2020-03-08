@@ -105,6 +105,31 @@ end
 # }
 ```
 
+## Rescue from
+
+Standard Rails like `rescue_from`. You capture errors by executing in `resolve_rescue_from`
+
+```ruby
+class RescueParent
+  include RescueFromError
+
+  rescue_from :all do
+    # ...
+  end
+
+  rescue_from NoMethodError do
+    # ...
+  end
+end
+
+class RescueTest
+  def some_method
+    resolve_rescue_from do
+      triger_no_method_error
+    end
+  end
+end
+```
 
 ## Development
 
