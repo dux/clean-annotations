@@ -16,6 +16,7 @@ module RescueFromError
     begin
       yield
     rescue => error
+      # search for specific class
       for klass in self.class.ancestors
         key = [klass, error.class].join('-')
 
@@ -24,6 +25,7 @@ module RescueFromError
         end
       end
 
+      # search for :all
       for klass in self.class.ancestors
         key = [klass, :all].join('-')
 
@@ -31,6 +33,9 @@ module RescueFromError
           return instance_exec(error, &block)
         end
       end
+
+      # raise unless found
+      raise error
     end
   end
 

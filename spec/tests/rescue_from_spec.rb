@@ -20,6 +20,14 @@ class RescueTest < RescueParent
   end
 end
 
+class SimpleRescueTest
+  include RescueFromError
+
+  rescue_from StandardError do
+    true
+  end
+end
+
 ###
 
 describe 'rescue_from' do
@@ -41,5 +49,15 @@ describe 'rescue_from' do
     end
 
     expect($rescue).to eq(:from_all)
+  end
+
+  it 'raises unhandled errors' do
+    expect do
+      SimpleRescueTest.new.instance_eval do
+        resolve_rescue_from do
+          testerooo
+        end
+      end
+    end.to raise_error NameError
   end
 end
