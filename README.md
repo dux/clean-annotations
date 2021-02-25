@@ -2,6 +2,14 @@
 
 Define annotatable attribute names and assign them to methods or classes, add callbacks to non-Rails classes. Void of dependencies.
 
+# INFO
+
+Deprecated and split in 3 libs, please use 
+
+* https://github.com/dux/class-cattr - Class attributes
+* https://github.com/dux/class-mattr - Class method attributes
+* https://github.com/dux/class-callbacks - Class callbacks
+
 ## Installation and usage
 
 to install
