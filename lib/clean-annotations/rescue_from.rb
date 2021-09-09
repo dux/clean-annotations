@@ -30,7 +30,18 @@ module RescueFromError
         key = [klass, :all].join('-')
 
         if block = RESCUES[key]
-          return instance_exec(error, &block)
+          begin
+            instance_exec(error, &block)
+          rescue => new_error
+            puts '--- rescue_from: inline error START'
+            puts new_error.message
+            puts '---'
+            puts new_error.backtrace.map { |_| '  %s' % _ }
+            puts '--- rescue_from: inline error END'
+            raise new_error
+          ensure
+            return
+          end
         end
       end
 
